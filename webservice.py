@@ -49,20 +49,27 @@ while True:
     response = requests.get(BASE_URL, params=params)
     data = response.json()
 
-#check if data is valid
+    #check if data is valid
+    time_series_key = None
+    for key in data.keys():
+        if "Time Series" in key:
+            time_series_key = key
+            break
 
-#filter data
-
-#create chart
-    if chart_type == "1":
-        chart = pygal.Line(title=f"{stock_symbol} Stock Prices")
-        chart.x_labels = []
-    elif chart_type == "2":
-        chart = pygal.Bar(title=f"{stock_symbol} Stock Prices")
-        chart.x_labels = []
-    else:
-        print("Invalid chart type. Please try again.")
+    if not time_series_key:
+        print("No valid data returned. Possibly hit the API limit or invalid symbol.")
         continue
+
+    time_series_data = data[time_series_key]
+
+    #filter data
+
+    #create chart
+    print("Generating chart...")
+    if chart_type == '2':
+        chart = pygal.Bar(x_label_rotation=45)
+    else:
+        chart = pygal.Line(x_label_rotation=45)     
 
     chart.render_in_browser()
     print("Chart generated successfully!\n")
