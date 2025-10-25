@@ -65,6 +65,7 @@ while True:
         continue
 
     chart.render_in_browser()
+    print("Chart generated successfully!\n")
 
 #continue or exit
     continue_prompt = input("\nDo you want to continue? (yes/no): \n").lower()
