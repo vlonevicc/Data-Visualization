@@ -63,13 +63,32 @@ while True:
     time_series_data = data[time_series_key]
 
     #filter data
+    filtered_dates = []
+    filtered_prices = []
+
+    for date_str, values in time_series_data.items():
+        try:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S") if ' ' in date_str else datetime.strptime(date_str, "%Y-%m-%d")
+            if start_date <= date_str[:10] <= end_date:
+                filtered_dates.append(date_obj)
+                filtered_prices.append(float(values["4. close"]))
+        except Exception as e:
+            continue
+
+    if not filtered_dates:
+        print("No data found in that date range. Try a wider range.")
+        continue
+
+    filtered_dates, filtered_prices = zip(*sorted(zip(filtered_dates, filtered_prices)))
 
     #create chart
     print("Generating chart...")
     if chart_type == '2':
         chart = pygal.Bar(x_label_rotation=45)
     else:
-        chart = pygal.Line(x_label_rotation=45)     
+        chart = pygal.Line(x_label_rotation=45)  
+
+    #chart info here#   
 
     chart.render_in_browser()
     print("Chart generated successfully!\n")
