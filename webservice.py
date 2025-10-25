@@ -24,15 +24,15 @@ while True:
         break
 
 # Determine function choice to API parameters
-if function_choice == '1':
-    function = "TIME_SERIES_INTRADAY"
-    interval = "60min"
-elif function_choice == '2':
-    function = "TIME_SERIES_DAILY"
-elif function_choice == '3':
-    function = "TIME_SERIES_WEEKLY"
-elif function_choice == '4':
-    function = "TIME_SERIES_MONTHLY"
-else:
-    print("Invalid choice. Exiting.")
-    exit()
+    if function_choice == '1':
+        function = "TIME_SERIES_INTRADAY"
+        interval = "60min"
+    elif function_choice == '2':
+        function = "TIME_SERIES_DAILY"
+    elif function_choice == '3':
+        function = "TIME_SERIES_WEEKLY"
+    elif function_choice == '4':
+        function = "TIME_SERIES_MONTHLY"
+    else:
+        print("Invalid choice. Exiting.")
+        exit()
