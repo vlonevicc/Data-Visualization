@@ -19,7 +19,7 @@ while True:
     start_date = input("\nEnter start date (YYYY-MM-DD): ")
     end_date = input("Enter end date (YYYY-MM-DD): ")
 
-#determine function choice to API parameters
+#determine choice of API parameters
     if function_choice == '1':
         function = "TIME_SERIES_INTRADAY"
         interval = "60min"
