@@ -54,6 +54,17 @@ while True:
 #filter data
 
 #create chart
+    if chart_type == "1":
+        chart = pygal.Line(title=f"{stock_symbol} Stock Prices")
+        chart.x_labels = []
+    elif chart_type == "2":
+        chart = pygal.Bar(title=f"{stock_symbol} Stock Prices")
+        chart.x_labels = []
+    else:
+        print("Invalid chart type. Please try again.")
+        continue
+
+    chart.render_in_browser()
 
 #continue or exit
     continue_prompt = input("\nDo you want to continue? (yes/no): \n").lower()
