@@ -19,6 +19,17 @@ while True:
     start_date = input("\nEnter start date (YYYY-MM-DD): ")
     end_date = input("Enter end date (YYYY-MM-DD): ")
 
+        # validate date range
+    try:
+        start_dt = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_dt = datetime.strptime(end_date, "%Y-%m-%d").date()
+        if end_dt < start_dt:
+            print("Error: End date cannot be before start date. Please try again.\n")
+            continue
+    except ValueError:
+        print("Invalid date format. Please use YYYY-MM-DD.\n")
+        continue
+
 #determine choice of API parameters
     if function_choice == '1':
         function = "TIME_SERIES_INTRADAY"
@@ -48,6 +59,23 @@ while True:
     print("\nFetching data from Alpha Vantage...")
     response = requests.get(BASE_URL, params=params)
     data = response.json()
+
+    print("\nFetching data from Alpha Vantage...")
+    try:
+        response = requests.get(BASE_URL, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
+        continue
+
+    # check for API limit or invalid symbol
+    if "Note" in data:
+        print("API call frequency limit reached. Please wait a minute before trying again.")
+        continue
+    if "Error Message" in data:
+        print("Invalid stock symbol. Please try again.")
+        continue
 
     #check if data is valid
     time_series_key = None
@@ -106,8 +134,16 @@ while True:
         chart.add("Low Price", low_prices)
         chart.add("Close Price", close_prices)
 
+    chart.x_title = "Date"
+    chart.y_title = "Price (USD)"
+    chart.show_legend = True
+
     chart.render_in_browser()
     print("Chart generated successfully!\n")
+
+    filename = f"{stock_symbol}_{function_choice}_{chart_type}.svg"
+    chart.render_to_file(filename)
+    print(f"Chart saved as {filename}")
 
 #continue or exit
     continue_prompt = input("\nDo you want to continue? (yes/no): \n").lower()
