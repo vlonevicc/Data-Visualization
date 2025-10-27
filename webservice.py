@@ -64,14 +64,20 @@ while True:
 
     #filter data
     filtered_dates = []
-    filtered_prices = []
+    open_prices = []
+    high_prices = []
+    low_prices = []
+    close_prices = []
 
     for date_str, values in time_series_data.items():
         try:
-            date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S") if ' ' in date_str else datetime.strptime(date_str, "%Y-%m-%d")
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S").date() if ' ' in date_str else datetime.strptime(date_str, "%Y-%m-%d").date()
             if start_date <= date_str[:10] <= end_date:
                 filtered_dates.append(date_obj)
-                filtered_prices.append(float(values["4. close"]))
+                open_prices.append(float(values["1. open"]))
+                high_prices.append(float(values["2. high"]))
+                low_prices.append(float(values["3. low"]))
+                close_prices.append(float(values["4. close"]))
         except Exception as e:
             continue
 
@@ -79,16 +85,26 @@ while True:
         print("No data found in that date range. Try a wider range.")
         continue
 
-    filtered_dates, filtered_prices = zip(*sorted(zip(filtered_dates, filtered_prices)))
+    filtered_dates, open_prices, high_prices, low_prices, close_prices = zip(*sorted(zip(filtered_dates, open_prices, high_prices, low_prices, close_prices)))
 
     #create chart
     print("Generating chart...")
     if chart_type == '2':
         chart = pygal.Bar(x_label_rotation=45)
+        chart.title = f"{stock_symbol} Stock Prices (Bar Chart)"
+        chart.x_labels = filtered_dates
+        chart.add("Open Price", open_prices)
+        chart.add("High Price", high_prices)
+        chart.add("Low Price", low_prices)
+        chart.add("Close Price", close_prices)
     else:
-        chart = pygal.Line(x_label_rotation=45)  
-
-    #chart info here#   
+        chart = pygal.Line(x_label_rotation=45)
+        chart.title = f"{stock_symbol} Stock Prices (Line Chart)"
+        chart.x_labels = filtered_dates
+        chart.add("Open Price", open_prices)
+        chart.add("High Price", high_prices)
+        chart.add("Low Price", low_prices)
+        chart.add("Close Price", close_prices)
 
     chart.render_in_browser()
     print("Chart generated successfully!\n")
