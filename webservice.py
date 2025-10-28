@@ -141,12 +141,8 @@ while True:
     chart.render_in_browser()
     print("Chart generated successfully!\n")
 
-    filename = f"{stock_symbol}_{function_choice}_{chart_type}.svg"
-    chart.render_to_file(filename)
-    print(f"Chart saved as {filename}")
-
 #continue or exit
-    continue_prompt = input("\nDo you want to continue? (yes/no): \n").lower()
+    continue_prompt = input("\nDo you want to continue? (yes/no): ").lower()
     if continue_prompt != 'yes':
         print("Exiting the program.")
         break
