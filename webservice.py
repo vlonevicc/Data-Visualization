@@ -17,7 +17,7 @@ while True:
         print("Invalid chart type. Please try again.\n")
         continue
 
-    print("\nEnter Time Series \n1.Intraday\n2.Daily\n3.Weekly\n4.Monthly\n")
+    print("\nEnter Time Series \n1.Intraday (2025 dates only)\n2.Daily (2025 dates only)\n3.Weekly\n4.Monthly\n")
     function_choice = input("Enter 1, 2, 3, or 4: ")
 
     if function_choice not in ['1', '2', '3', '4']:
